@@ -111,7 +111,6 @@ function drawCurrentShape(){
         // Create paint brush
         shapeCur = new brush(mouseDownPos,null,line_Width,currentColor,null,false,brushPoints);
         shapeCur.draw(ctx);
-        console.log(typeof shapeCur.draw(ctx));
     }else if( currentTool === "line"){
         // Creates line
         shapeCur = new line(mouseDownPos,mouseMovePos,line_Width,currentColor,null,false);
