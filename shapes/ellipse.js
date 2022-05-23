@@ -1,8 +1,13 @@
 import {Point, shape} from "./shape.js";
 
-class ellipse extends shape{
+class ellipse {
     constructor(start,end,size,color,fillColor,isFill,angle){
-        super(start,end,size,color,fillColor,isFill);
+        this.start = start;
+        this.end = end;
+        this.size = size;
+        this.color = color;
+        this.fillColor = fillColor;
+        this.isFill = isFill;
         this.angle = angle;
         this.radiusX = Math.abs(end.x-start.x);
         this.radiusY = Math.abs(end.y-start.y);

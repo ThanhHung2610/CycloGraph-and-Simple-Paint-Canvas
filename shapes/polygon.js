@@ -1,9 +1,14 @@
 import { shape } from "./shape.js";
 
-class polygon extends shape{
+class polygon {
 
     constructor(start,end,size,color,fillColor,isFill){
-        super(start,end,size,color,fillColor,isFill);
+        this.start = start;
+        this.end = end;
+        this.size = size;
+        this.color = color;
+        this.fillColor = fillColor;
+        this.isFill = isFill;
     }
     // Converts degrees to radians
     degreesToRadians(degrees){

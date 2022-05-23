@@ -1,9 +1,14 @@
 import {Point, shape} from "./shape.js";
 import { line } from "./line.js";
 
-class rectangle extends shape{
+class rectangle {
     constructor(start,end,size,color,fillColor,isFill){
-        super(start,end,size,color,fillColor,isFill);
+        this.start = start;
+        this.end = end;
+        this.size = size;
+        this.color = color;
+        this.fillColor = fillColor;
+        this.isFill = isFill;
         this.height=Math.abs(end.x-start.x);
         this.width=Math.abs(end.y-start.y);
         

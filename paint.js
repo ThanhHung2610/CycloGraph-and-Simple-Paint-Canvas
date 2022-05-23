@@ -15,13 +15,15 @@ let currentBg = "white";
 let currentTool = 'brush';
 let currentFillColor = 'green';
 // List of shapes
-let shapesList = new Array(shape);
+let shapesList = new Array();
 // Temp shape to handle draw current shape
 let shapeCur;
 // Flag to handle painting event
 let drawing = false;
 let done = true;
 // free = true;
+
+let SList=new Array();
 
 // Save position of mouse event
 let mouseDownPos;
@@ -54,7 +56,6 @@ document.getElementById('colorpicker').addEventListener('input',function(){
 /*document.getElementById('eraser').addEventListener('click',function(){
     currentColor=
 })*/
-
 document.ChangeTool = function ChangeTool(toolClicked){
     document.getElementById("open").className = "";
     document.getElementById("save").className = "";
@@ -107,23 +108,26 @@ function drawCurrentShape(){
     canvas.strokeStyle=currentColor;
     canvas.strokeColor=currentColor;    
     ctx.fillStyle = currentBg;
+    let shapeCur;
     if( currentTool === "brush"){
         // Create paint brush
         shapeCur = new brush(mouseDownPos,null,line_Width,currentColor,null,false,brushPoints);
         shapeCur.draw(ctx);
-        console.log(typeof shapeCur.draw(ctx));
     }else if( currentTool === "line"){
         // Creates line
         shapeCur = new line(mouseDownPos,mouseMovePos,line_Width,currentColor,null,false);
         shapeCur.draw(ctx);
+        console.log("line");
     } else if(currentTool === "rectangle"){
         // Creates rectangles
         shapeCur = new rectangle(mouseDownPos,mouseMovePos,line_Width,currentColor,null,false);
         shapeCur.draw(ctx);
+        console.log("rec");
     } else if(currentTool === "circle"){
        // Creates circle
        shapeCur = new circle(mouseDownPos,mouseMovePos,line_Width,currentColor,null,false);
        shapeCur.draw(ctx);
+       console.log("cir");
     } else if(currentTool === "ellipse"){
         // Create ellipses
         shapeCur = new ellipse(mouseDownPos,mouseMovePos,line_Width,currentColor,'red',false,0);
@@ -132,53 +136,67 @@ function drawCurrentShape(){
         shapeCur = new polygon(mouseDownPos,mouseMovePos,line_Width,currentColor,null,false);
         shapeCur.draw(ctx);
     }  
+    if(drawing===false){
+        shapesList.push(shapeCur);
+    }
 }
 
 
+    
+    let saveImgdata;
 
     function SaveCanvasImage(){
-    // Save image
-    savedImageData =  ctx.getImageData(0,0,canvas.width,canvas.height);
+        // Save image
+        saveImgdata=ctx.getImageData(0,0,canvas.width,canvas.height);
     }
-
     function RedrawCanvasImage(){
-        
-        drawCanvas();
-        
-        // Draw shapes List
-        let n =  shapesList.length;
-        for (let i = 0; i < n; i++){
-            shapesList[i].draw(ctx);
-        }
-
-        ctx.strokeStyle =  currentColor;
-        ctx.lineWidth =  line_Width;
-        ctx.fillStyle =  currentBg;
+        // Restore image
+        ctx.putImageData(saveImgdata,0,0);
+        canvas.strokeStyle=currentColor;
     }
+
+    // function RedrawCanvasImage(){       
+    //     drawCanvas();
+    //     let temp;
+    //     // Draw shapes List
+    //     let n =  shapesList.length;
+    //     for (let i = 0; i < n; i++){
+    //         //temp=new shapesList[i](mouseDownPos,mouseMovePos,line_Width,currentColor,null,false);
+    //         shapesList[i].draw(ctx);
+    //         console.log(i,"   ",shapesList[i]);
+    //     }
+      
+    //     ctx.strokeStyle =  currentColor;
+    //     ctx.lineWidth =  line_Width;
+    //     ctx.fillStyle =  currentBg;
+    // }
 
 
 
     function ReactToMouseDown(e){
-    // Change the mouse pointer to a crosshair
+        // Change the mouse pointer to a crosshair
         canvas.style.cursor = "crosshair";
 
         ctx.strokeStyle=currentColor;
 
-    // Store location 
-        mouseDownPos = GetMousePosition(e.clientX, e.clientY, canvas);
+        drawing=true;
 
-    // Store that yes the mouse is being held down
-    drawing = true;
+        // Store location 
+            mouseDownPos = GetMousePosition(e.clientX, e.clientY);
+        SaveCanvasImage()
+        // Store that yes the mouse is being held down
+        drawing = true;
 
-    // Brush will store points in an array
-    if( currentTool === 'brush'){
-            brushPoints.push(mouseDownPos);
-    }
+        // Brush will store points in an array
+        if( currentTool === 'brush'){
+                brushPoints.push(mouseDownPos);
+        }
+        //RedrawCanvasImage();
     };
 
 function ReactToMouseMove(e){
     canvas.style.cursor = "crosshair";
-    mouseMovePos = GetMousePosition(e.clientX, e.clientY,  canvas);
+    mouseMovePos = GetMousePosition(e.clientX, e.clientY);
     if (drawing){
         // If using brush tool and dragging store each point
         if( currentTool === 'brush'){
@@ -187,20 +205,20 @@ function ReactToMouseMove(e){
                 brushPoints.push( mouseMovePos);
             }
         }
-        //RedrawCanvasImage();
+        RedrawCanvasImage();
         drawCurrentShape();
     }
 };
 
 function ReactToMouseUp(e){
     canvas.style.cursor = "default";
-    mouseDownPos = GetMousePosition(e.clientX, e.clientY,  canvas);
+    mouseMovePos = GetMousePosition(e.clientX, e.clientY);
     if ( currentTool==='brush'){
         brushPoints.push( mouseMovePos);
     }
-    drawCurrentShape();
-    shapesList.push(shape);
-    brushPoints.splice(0, brushPoints.length);
-    //RedrawCanvasImage();
     drawing = false;
+    //
+    RedrawCanvasImage();
+    drawCurrentShape();
+    brushPoints.splice(0, brushPoints.length);
 };  

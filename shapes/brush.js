@@ -1,7 +1,12 @@
 import { shape, Point } from "./shape.js";
-class brush extends shape{
+class brush{
     constructor(start,end,size,color,fillColor,isFill,listBrushPoints){
-        super(start,end,size,color,fillColor,isFill);
+        this.start = start;
+        this.end = end;
+        this.size = size;
+        this.color = color;
+        this.fillColor = fillColor;
+        this.isFill = isFill;
         this.listBrushPoints = listBrushPoints;
     }
     draw(CanvasContext){
