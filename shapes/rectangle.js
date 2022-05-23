@@ -9,8 +9,8 @@ class rectangle {
         this.color = color;
         this.fillColor = fillColor;
         this.isFill = isFill;
-        this.height=Math.abs(end.x-start.x);
-        this.width=Math.abs(end.y-start.y);
+        this.width = Math.abs(end.x-start.x);
+        this.height = Math.abs(end.y-start.y);
         
         if (start.x>end.x){
             this.left = end.x;
@@ -29,12 +29,16 @@ class rectangle {
         CanvasContext.strokeStyle=this.color;
         CanvasContext.lineWidth = this.size;
         CanvasContext.beginPath();
-        CanvasContext.strokeRect(this.left,this.top,this.width,this.height);
-        if (this.isFill){
+         if (this.isFill){
             CanvasContext.fillStyle =  this.fillColor;
-            CanvasContext.fill();
+            CanvasContext.fillRect(this.left,this.top,this.width,this.height);
+            CanvasContext.strokeRect(this.left,this.top,this.width,this.height);
+         }else{
+            CanvasContext.strokeRect(this.left,this.top,this.width,this.height);
+         }
+       
         }
-    }
+    
 }
 
 export {rectangle};

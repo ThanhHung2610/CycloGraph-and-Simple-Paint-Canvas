@@ -10,10 +10,12 @@ import {circle} from "./shapes/circle.js";
 // working with Canvas
 let line_Width = 5;
 let currentColor ="black" ;
-let currentBg = "white";
+//Background color
+let currentBg = "#FFFFFF";
+//Fill Color
 // Tool currently using
 let currentTool = 'brush';
-let currentFillColor = 'green';
+let currentFillColor = "green";
 // List of shapes
 let shapesList = new Array();
 // Temp shape to handle draw current shape
@@ -37,34 +39,112 @@ let polygonSides = 6;
 
 let canvas;
 let ctx;
-let canvasHeight = 600;
-let canvasWidth = 500;
+let canvasHeight = 500;
+let canvasWidth = 1000;
+let flagEraser=false;
+let polySide;
+let ColBackUp;
 
+
+let saveImgdata;
+
+let isFill=false;
+
+document.getElementById("fillColor").addEventListener('click',function(){
+    if(this.checked){
+        isFill=true;
+    }
+    else{
+        isFill=false;
+    }
+})
+
+document.getElementById('fillcolorpicker').addEventListener('input',function(){
+    currentFillColor =this.value;
+})
 
 // load page ->
 document.addEventListener('DOMContentLoaded', setupCanvas());
 
+// document.getElementById('bgcolorpicker').addEventListener('input',function(){
+//     currentBg = this.value;
+//     ctx.fillStyle =  currentBg;
+//     ctx.fillRect(0, 0,  canvas.width,  canvas.height);
+//     RedrawCanvasImage();
+// });
+
 document.getElementById('bgcolorpicker').addEventListener('input',function(){
+    let oldRed = parseInt(currentBg.substring(1,3),16);
+    let oldGreen = parseInt(currentBg.substring(3,5),16);
+    let oldBlue = parseInt(currentBg.substring(5,7),16);
     currentBg = this.value;
-    //RedrawCanvasImage();
+    let newRed = parseInt(currentBg.substring(1,3),16);
+    let newGreen = parseInt(currentBg.substring(3,5),16);
+    let newBlue = parseInt(currentBg.substring(5,7),16);
+    let data = saveImgdata.data;
+    let n = data.length;
+   
+    for(let i = 0; i < n-4; i+=4){
+        
+        if (data[i] === oldRed && data[i+1] === oldGreen && data[i+2] === oldBlue)
+        {
+            data[i]=newRed;
+            data[i+1]=newGreen;
+            data[i+2]=newBlue;
+        }
+    }
+   
+    //ctx.putImageData(data,0,0)
+    RedrawCanvasImage();
 });
+
 
 document.getElementById('colorpicker').addEventListener('input',function(){
     currentColor=this.value;
 });
 
-/*document.getElementById('eraser').addEventListener('click',function(){
-    currentColor=
-})*/
+document.getElementById('controlSize').addEventListener('change', function() {
+    line_Width = this.value;
+    document.getElementById("showSize").innerHTML = this.value;
+});
+
+document.getElementById('eraser').addEventListener('click',function(){
+    saveColor();
+    flagEraser=true;
+    currentColor= currentBg;
+    currentTool='brush';
+})
+
+document.getElementById('clear').addEventListener('click',function(){
+    drawCanvas();
+    saveImgdata();
+})
+
+
+function saveColor(){
+    ColBackUp=currentColor;
+}
+
+
 document.ChangeTool = function ChangeTool(toolClicked){
-    document.getElementById("open").className = "";
-    document.getElementById("save").className = "";
+    if (flagEraser){
+        currentColor=ColBackUp;
+    }
+
     document.getElementById("brush").className = "";
     document.getElementById("line").className = "";
     document.getElementById("rectangle").className = "";
     document.getElementById("circle").className = "";
     document.getElementById("ellipse").className = "";
     document.getElementById("polygon").className = "";
+
+    polySide = parseInt(document.getElementById("polygonSide").value);
+    if (polySide>360 || polySide<3){
+        alert("Invalid Polygonside");
+        polySide = parseInt(document.getElementById("polygonSide").value);
+    }else{
+        polygonSides=polySide;
+    }
     // Highlight the last selected tool on toolbar
     document.getElementById(toolClicked).className = "selected";
     // Change current tool used for drawing
@@ -81,6 +161,7 @@ function GetMousePosition(x,y){
 }
 
 function setupCanvas(){
+
     // Get reference to canvas element
     canvas = document.getElementById('my-canvas');
     // Get methods for manipulating the canvas
@@ -108,32 +189,32 @@ function drawCurrentShape(){
     canvas.strokeStyle=currentColor;
     canvas.strokeColor=currentColor;    
     ctx.fillStyle = currentBg;
+    ctx.lineWidth =  line_Width;
     let shapeCur;
+
+
     if( currentTool === "brush"){
         // Create paint brush
-        shapeCur = new brush(mouseDownPos,null,line_Width,currentColor,null,false,brushPoints);
+        shapeCur = new brush(mouseDownPos,null,line_Width,currentColor,currentFillColor,isFill,brushPoints);
         shapeCur.draw(ctx);
     }else if( currentTool === "line"){
         // Creates line
-        shapeCur = new line(mouseDownPos,mouseMovePos,line_Width,currentColor,null,false);
+        shapeCur = new line(mouseDownPos,mouseMovePos,line_Width,currentColor,currentFillColor,isFill);
         shapeCur.draw(ctx);
-        console.log("line");
     } else if(currentTool === "rectangle"){
         // Creates rectangles
-        shapeCur = new rectangle(mouseDownPos,mouseMovePos,line_Width,currentColor,null,false);
+        shapeCur = new rectangle(mouseDownPos,mouseMovePos,line_Width,currentColor,currentFillColor,isFill);
         shapeCur.draw(ctx);
-        console.log("rec");
     } else if(currentTool === "circle"){
        // Creates circle
-       shapeCur = new circle(mouseDownPos,mouseMovePos,line_Width,currentColor,null,false);
+       shapeCur = new circle(mouseDownPos,mouseMovePos,line_Width,currentColor,currentFillColor,isFill);
        shapeCur.draw(ctx);
-       console.log("cir");
     } else if(currentTool === "ellipse"){
         // Create ellipses
-        shapeCur = new ellipse(mouseDownPos,mouseMovePos,line_Width,currentColor,'red',false,0);
+        shapeCur = new ellipse(mouseDownPos,mouseMovePos,line_Width,currentColor,currentFillColor,isFill,0);
         shapeCur.draw(ctx);
     } else if(currentTool === "polygon"){
-        shapeCur = new polygon(mouseDownPos,mouseMovePos,line_Width,currentColor,null,false);
+        shapeCur = new polygon(mouseDownPos,mouseMovePos,line_Width,currentColor,currentFillColor,isFill,polygonSides);
         shapeCur.draw(ctx);
     }  
     if(drawing===false){
@@ -143,11 +224,10 @@ function drawCurrentShape(){
 
 
     
-    let saveImgdata;
 
     function SaveCanvasImage(){
         // Save image
-        saveImgdata=ctx.getImageData(0,0,canvas.width,canvas.height);
+        saveImgdata=ctx.getImageData(0,0,canvasWidth,canvasHeight);
     }
     function RedrawCanvasImage(){
         // Restore image
@@ -183,7 +263,7 @@ function drawCurrentShape(){
 
         // Store location 
             mouseDownPos = GetMousePosition(e.clientX, e.clientY);
-        SaveCanvasImage()
+        //SaveCanvasImage()
         // Store that yes the mouse is being held down
         drawing = true;
 
@@ -218,6 +298,7 @@ function ReactToMouseUp(e){
     }
     drawing = false;
     //
+    SaveCanvasImage();
     RedrawCanvasImage();
     drawCurrentShape();
     brushPoints.splice(0, brushPoints.length);
