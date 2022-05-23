@@ -15,7 +15,7 @@ class shape{
         this.isFill = isFill;
     }
 
-    showShape(CanvasContext);
+    draw(CanvasContext);
 }
 
 export {Point, shape};

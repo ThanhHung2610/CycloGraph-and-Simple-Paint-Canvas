@@ -4,7 +4,7 @@ class brush extends shape{
         super(start,end,size,color,fillColor,isFill);
         this.listBrushPoints = listBrushPoints;
     }
-    showShape(CanvasContext){
+    draw(CanvasContext){
         CanvasContext.strokeStyle = this.color;
         let nPoints = this.listBrushPoints.length;
         for(let i = 0; i < nPoints; i++){
