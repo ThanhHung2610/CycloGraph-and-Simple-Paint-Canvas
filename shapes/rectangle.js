@@ -4,8 +4,8 @@ import { line } from "./line.js";
 class rectangle extends shape{
     constructor(start,end,size,color,fillColor,isFill){
         super(start,end,size,color,fillColor,isFill);
-        this.height=Math.abs(end.x-start.x);
-        this.width=Math.abs(end.y-start.y);
+        this.width=Math.abs(end.x-start.x);
+        this.height=Math.abs(end.y-start.y);
         
         if (start.x>end.x){
             this.left = end.x;

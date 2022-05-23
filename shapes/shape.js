@@ -15,8 +15,8 @@ class shape{
         this.isFill = isFill;
     }
 
-    draw(CanvasContext){
-
+    draw(CanvasContext)  {
+        
     }
 }
 

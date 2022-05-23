@@ -15,9 +15,9 @@ let currentBg = "white";
 let currentTool = 'brush';
 let currentFillColor = 'green';
 // List of shapes
-let shapesList = new Array(shape);
+let shapesList = [];
 // Temp shape to handle draw current shape
-let shapeCur;
+let shapeCur = new shape();
 // Flag to handle painting event
 let drawing = false;
 let done = true;
@@ -31,7 +31,7 @@ let brushPoints = new Array(Point);
 
 let rotatedAngle = null;
 // Number of Sides of the polygon
-let poolygonSides = 6;
+let polygonSides = 6;
 
 let canvas;
 let ctx;
@@ -147,6 +147,7 @@ function drawCurrentShape(){
         // Draw shapes List
         let n =  shapesList.length;
         for (let i = 0; i < n; i++){
+            console.log(shapesList[i].start);
             shapesList[i].draw(ctx);
         }
 
@@ -164,7 +165,7 @@ function drawCurrentShape(){
         ctx.strokeStyle=currentColor;
 
     // Store location 
-        mouseDownPos = GetMousePosition(e.clientX, e.clientY, canvas);
+        mouseDownPos = GetMousePosition(e.clientX, e.clientY);
 
     // Store that yes the mouse is being held down
     drawing = true;
@@ -177,7 +178,7 @@ function drawCurrentShape(){
 
 function ReactToMouseMove(e){
     canvas.style.cursor = "crosshair";
-    mouseMovePos = GetMousePosition(e.clientX, e.clientY,  canvas);
+    mouseMovePos = GetMousePosition(e.clientX, e.clientY);
     if (drawing){
         // If using brush tool and dragging store each point
         if( currentTool === 'brush'){
@@ -193,7 +194,7 @@ function ReactToMouseMove(e){
 
 function ReactToMouseUp(e){
     canvas.style.cursor = "default";
-    mouseDownPos = GetMousePosition(e.clientX, e.clientY,  canvas);
+    mouseDownPos = GetMousePosition(e.clientX, e.clientY);
     if ( currentTool==='brush'){
         brushPoints.push( mouseMovePos);
     }
