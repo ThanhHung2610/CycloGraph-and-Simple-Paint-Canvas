@@ -15,7 +15,12 @@ class shape{
         this.isFill = isFill;
     }
 
+<<<<<<< HEAD
     draw(CanvasContext){
+=======
+    draw(CanvasContext);
+}
+>>>>>>> 304faed0a8724a7b788d1592220f2c1fb596e65a
 
     }
 }
