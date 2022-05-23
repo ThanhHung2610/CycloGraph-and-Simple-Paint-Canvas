@@ -17,7 +17,7 @@ let currentFillColor = 'green';
 // List of shapes
 let shapesList = new Array();
 // Temp shape to handle draw current shape
-let shapeCur;
+let shapeCur = new shape();
 // Flag to handle painting event
 let drawing = false;
 let done = true;
@@ -33,7 +33,7 @@ let brushPoints = new Array(Point);
 
 let rotatedAngle = null;
 // Number of Sides of the polygon
-let poolygonSides = 6;
+let polygonSides = 6;
 
 let canvas;
 let ctx;

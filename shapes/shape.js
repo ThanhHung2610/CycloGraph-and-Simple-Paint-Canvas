@@ -19,4 +19,5 @@ class shape{
         console.log("ahihi");
     }
 }
+
 export {Point, shape};
