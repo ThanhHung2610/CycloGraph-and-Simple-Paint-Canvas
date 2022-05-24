@@ -1,12 +1,9 @@
 import { shape, Point } from "./shape.js";
 class brush{
-    constructor(start,end,size,color,fillColor,isFill,listBrushPoints){
-        this.start = start;
-        this.end = end;
+    constructor(size,color,listBrushPoints){
+
         this.size = size;
         this.color = color;
-        this.fillColor = fillColor;
-        this.isFill = isFill;
         this.listBrushPoints = listBrushPoints;
     }
     draw(CanvasContext){
