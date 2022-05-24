@@ -34,7 +34,7 @@ let polygonSides = 6;
 
 let canvas;
 let ctx;
-let canvasHeight = 600;
+let canvasHeight = 500;
 let canvasWidth = 1000;
 // store flag eraser
 let flagEraser=false;
@@ -45,7 +45,7 @@ let ColBackUp;
 // Properties of cyclography drawing
 let CGSides = 36, CGSide = 36;
 //Center for CycloGraph
-let CGcenter=new Point(500,300);
+let CGcenter=new Point(500,250);
 
 
 // Store canvas data
