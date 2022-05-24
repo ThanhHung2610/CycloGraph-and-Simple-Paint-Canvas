@@ -69,6 +69,13 @@ document.getElementById('bgcolorpicker').addEventListener('input',function(){
     let newRed = parseInt(currentBg.substring(1,3),16);
     let newGreen = parseInt(currentBg.substring(3,5),16);
     let newBlue = parseInt(currentBg.substring(5,7),16);
+
+    // Update color if in erase mode
+    if (flagEraser){
+        currentColor=currentBg;
+    }
+
+
     let data = saveImgdata.data;
     let n = data.length;
    
@@ -180,6 +187,7 @@ document.getElementById('Ycord').addEventListener('change',function(){
 document.ChangeTool = function ChangeTool(toolClicked){
     if (flagEraser){
         currentColor=ColBackUp;
+        flagEraser = false;
     }
 
     document.getElementById("brush").className = "";
@@ -290,8 +298,14 @@ function drawCycloGraph(){
 
         ctx.rotate(angle * Math.PI / 180);    
         if( currentTool === "brush"){
+            let brushPointsTrSlate = [];
+            let n = brushPoints.length;
+            for(let i = 0; i < n; i++){
+                brushPointsTrSlate.push(new Point(brushPoints[i].x - CGcenter.x, brushPoints[i].y - CGcenter.y));
+            }
+
             // Create paint brush
-            shapeCur = new brush(line_Width,currentColor,brushPoints);
+            shapeCur = new brush(line_Width,currentColor,brushPointsTrSlate);
             shapeCur.draw(ctx);
         }else if( currentTool === "line"){
             // Creates line
@@ -344,28 +358,25 @@ function drawCycloGraph(){
     // }
 
 
-    function ReactToMouseDown(e){
-        // Change the mouse pointer to a crosshair
-        canvas.style.cursor = "crosshair";
+function ReactToMouseDown(e){
+    // Change the mouse pointer to a crosshair
+    canvas.style.cursor = "crosshair";
 
-        ctx.strokeStyle=currentColor;
+    ctx.strokeStyle=currentColor;
 
-        drawing=true;
+    drawing=true;
 
-        // Store location 
-        mouseDownPos = GetMousePosition(e.clientX, e.clientY);
-        SaveCanvasImage()
-        // Store that yes the mouse is being held down
-        drawing = true;
+    // Store location 
+    mouseDownPos = GetMousePosition(e.clientX, e.clientY);
+    SaveCanvasImage()
+    // Store that yes the mouse is being held down
+    drawing = true;
 
-        // Brush will store points in an array
-        if( currentTool === 'brush'){
-                brushPoints.push(mouseDownPos);
-        }
-        if(CGMode){
-            drawCycloGraph();
-        }
-    };
+    // Brush will store points in an array
+    if( currentTool === 'brush'){
+            brushPoints.push(mouseDownPos);
+    }
+};
 
 function ReactToMouseMove(e){
     console.log(CGcenter);
@@ -382,10 +393,10 @@ function ReactToMouseMove(e){
             }
         }
         RedrawCanvasImage();
-        drawCurrentShape();
-        if(CGMode){
+        if(CGMode && !flagEraser){
             drawCycloGraph();
         }
+        else drawCurrentShape();
     }
 };
 
