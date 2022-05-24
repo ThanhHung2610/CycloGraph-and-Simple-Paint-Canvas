@@ -7,7 +7,6 @@ class brush{
         this.listBrushPoints = listBrushPoints;
     }
     draw(CanvasContext){
-        CanvasContext.lineCap = "round";
         CanvasContext.strokeStyle = this.color;
         let nPoints = this.listBrushPoints.length;
         for(let i = 1; i < nPoints; i++){

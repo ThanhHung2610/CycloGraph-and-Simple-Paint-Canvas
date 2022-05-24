@@ -12,31 +12,23 @@ let line_Width = 5;
 let currentColor ="black" ;
 //Background color
 let currentBg = "#FFFFFF";
-//Fill Color
 // Tool currently using
 let currentTool = 'brush';
+//Fill Color
 let currentFillColor = "green";
 // List of shapes
-let shapesList = new Array();
+//let shapesList = new Array();
 // Temp shape to handle draw current shape
 let shapeCur = new shape();
 // Flag to handle painting event
 let drawing = false;
-let done = true;
-// free = true;
 
-let SList=new Array();
-
-//Center for CycloGraph
-let CGcenter=new Point(500,200);
-
-// Save position of mouse event
+// Store position of mouse event
 let mouseDownPos;
 let mouseMovePos;
-
+// List points of brush
 let brushPoints = new Array(Point);
 
-let rotatedAngle = null;
 // Number of Sides of the polygon
 let polygonSides = 6;
 
@@ -44,19 +36,26 @@ let canvas;
 let ctx;
 let canvasHeight = 500;
 let canvasWidth = 1000;
+// store flag eraser
 let flagEraser=false;
 let polySide;
 let ColBackUp;
 
 
+// Properties of cyclography drawing
+let CGSides = 36, CGSide = 36;
+//Center for CycloGraph
+let CGcenter=new Point(500,200);
+
+
+// Store canvas data
 let saveImgdata;
 // Fill mode
 let isFill = false;
 // Cyclograph Mode
 let CGMode = false;
-
+// HTML element show mouse position in canvas
 let showMp;
-let positionString = '';
 // Load page ->
 document.addEventListener('DOMContentLoaded', setupCanvas());
 
@@ -74,13 +73,10 @@ document.getElementById('bgcolorpicker').addEventListener('input',function(){
     if (flagEraser){
         currentColor=currentBg;
     }
-
-
+    // loop canvas.data and change background color
     let data = saveImgdata.data;
-    let n = data.length;
-   
+    let n = data.length;   
     for(let i = 0; i < n-4; i+=4){
-        
         if (data[i] === oldRed && data[i+1] === oldGreen && data[i+2] === oldBlue)
         {
             data[i]=newRed;
@@ -88,8 +84,6 @@ document.getElementById('bgcolorpicker').addEventListener('input',function(){
             data[i+2]=newBlue;
         }
     }
-   
-    //ctx.putImageData(data,0,0)
     RedrawCanvasImage();
 });
 
@@ -143,7 +137,7 @@ document.getElementById("polygonSide").addEventListener('change',function(){
     }
 })
 
-let CGSides = 36, CGSide = 36;
+
 document.getElementById("CGSide").addEventListener('change',function(){
     CGSide = parseInt(this.value);
     if (CGSide>360 || CGSide<2){
@@ -180,7 +174,6 @@ document.getElementById('Ycord').addEventListener('change',function(){
         CGcenter.y=this.value;
     }
 })
-
 
 
 
@@ -221,7 +214,7 @@ function setupCanvas(){
     canvas = document.getElementById('my-canvas');
     // Get methods for manipulating the canvas
     ctx = canvas.getContext('2d');
-    // Get element show mouse position
+    // Get element shows mouse position
     showMp = document.getElementById("position");
     drawCanvas();
    // Execute ReactToMouseDown when the mouse is clicked
@@ -233,13 +226,12 @@ function setupCanvas(){
 }
 
 
-
-let shapeDraw;
 function drawCanvas(){
     // Draw background
     canvas.style.border = "1px solid";
     ctx.strokeStyle =  currentColor;
     ctx.lineWidth =  line_Width;
+    ctx.lineCap = "round";
     ctx.fillStyle =  currentBg;
     ctx.fillRect(0, 0,  canvas.width,  canvas.height);
 }
@@ -276,9 +268,6 @@ function drawCurrentShape(){
         shapeCur = new polygon(mouseDownPos,mouseMovePos,line_Width,currentColor,currentFillColor,isFill,polygonSides);
         shapeCur.draw(ctx);
     }  
-    if(drawing===false){
-        shapesList.push(shapeCur);
-    }
 }
 
 
@@ -294,8 +283,7 @@ function drawCycloGraph(){
     let mousedownTrSlate=new Point(mouseDownPos.x-CGcenter.x,mouseDownPos.y-CGcenter.y);
     let mousemoveTrSlate=new Point(mouseMovePos.x-CGcenter.x,mouseMovePos.y-CGcenter.y);
 
-    for(let i = 0;i<CGSides;i++){
-
+    for(let i = 0;i < CGSides;i++){
         ctx.rotate(angle * Math.PI / 180);    
         if( currentTool === "brush"){
             let brushPointsTrSlate = [];
@@ -303,7 +291,6 @@ function drawCycloGraph(){
             for(let i = 0; i < n; i++){
                 brushPointsTrSlate.push(new Point(brushPoints[i].x - CGcenter.x, brushPoints[i].y - CGcenter.y));
             }
-
             // Create paint brush
             shapeCur = new brush(line_Width,currentColor,brushPointsTrSlate);
             shapeCur.draw(ctx);
@@ -316,9 +303,9 @@ function drawCycloGraph(){
             shapeCur = new rectangle(mousedownTrSlate,mousemoveTrSlate,line_Width,currentColor,currentFillColor,isFill);
             shapeCur.draw(ctx);
         } else if(currentTool === "circle"){
-        // Creates circle
-        shapeCur = new circle(mousedownTrSlate,mousemoveTrSlate,line_Width,currentColor,currentFillColor,isFill);
-        shapeCur.draw(ctx);
+            // Creates circle
+            shapeCur = new circle(mousedownTrSlate,mousemoveTrSlate,line_Width,currentColor,currentFillColor,isFill);
+            shapeCur.draw(ctx);
         } else if(currentTool === "ellipse"){
             // Create ellipses
             shapeCur = new ellipse(mousedownTrSlate,mousemoveTrSlate,line_Width,currentColor,currentFillColor,isFill,0);
@@ -331,32 +318,15 @@ function drawCycloGraph(){
     ctx.translate(-CGcenter.x,-CGcenter.y);    
 }
 
-    function SaveCanvasImage(){
-        // Save image
-        saveImgdata = ctx.getImageData(0,0,canvasWidth,canvasHeight);
-    }
-    function RedrawCanvasImage(){
-        // Restore image
-        ctx.putImageData(saveImgdata,0,0);
-        canvas.strokeStyle=currentColor;
-    }
-
-    // function RedrawCanvasImage(){       
-    //     drawCanvas();
-    //     let temp;
-    //     // Draw shapes List
-    //     let n =  shapesList.length;
-    //     for (let i = 0; i < n; i++){
-    //         //temp=new shapesList[i](mouseDownPos,mouseMovePos,line_Width,currentColor,null,false);
-    //         shapesList[i].draw(ctx);
-    //         console.log(i,"   ",shapesList[i]);
-    //     }
-      
-    //     ctx.strokeStyle =  currentColor;
-    //     ctx.lineWidth =  line_Width;
-    //     ctx.fillStyle =  currentBg;
-    // }
-
+function SaveCanvasImage(){
+    // Save image
+    saveImgdata = ctx.getImageData(0,0,canvasWidth,canvasHeight);
+}
+function RedrawCanvasImage(){
+    // Restore image
+    ctx.putImageData(saveImgdata,0,0);
+    canvas.strokeStyle=currentColor;
+}
 
 function ReactToMouseDown(e){
     // Change the mouse pointer to a crosshair
