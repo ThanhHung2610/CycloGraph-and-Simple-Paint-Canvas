@@ -227,7 +227,7 @@ function drawCurrentShape(){
 
     function SaveCanvasImage(){
         // Save image
-        saveImgdata=ctx.getImageData(0,0,canvasWidth,canvasHeight);
+        saveImgdata = ctx.getImageData(0,0,canvasWidth,canvasHeight);
     }
     function RedrawCanvasImage(){
         // Restore image
@@ -262,8 +262,8 @@ function drawCurrentShape(){
         drawing=true;
 
         // Store location 
-            mouseDownPos = GetMousePosition(e.clientX, e.clientY);
-        //SaveCanvasImage()
+        mouseDownPos = GetMousePosition(e.clientX, e.clientY);
+        SaveCanvasImage()
         // Store that yes the mouse is being held down
         drawing = true;
 
@@ -271,7 +271,6 @@ function drawCurrentShape(){
         if( currentTool === 'brush'){
                 brushPoints.push(mouseDownPos);
         }
-        //RedrawCanvasImage();
     };
 
 function ReactToMouseMove(e){
