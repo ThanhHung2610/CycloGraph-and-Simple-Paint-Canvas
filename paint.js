@@ -110,7 +110,6 @@ document.getElementById('eraser').addEventListener('click',function(){
 
 document.getElementById('clear').addEventListener('click',function(){
     drawCanvas();
-    saveImgdata();
 })
 
 
@@ -349,7 +348,6 @@ function ReactToMouseDown(e){
 };
 
 function ReactToMouseMove(e){
-    console.log(CGcenter);
     canvas.style.cursor = "crosshair";
     mouseMovePos = GetMousePosition(e.clientX, e.clientY);
     showMp.innerHTML = 'X = '+ parseInt(mouseMovePos.x)+', Y = '+parseInt(mouseMovePos.y);
