@@ -26,9 +26,25 @@
                 </div>
 
                 <div>
-                    <label for="fillColor">Fill</label>
+                    <h3>Fill</h3>
                     <input type="checkbox" id="fillColor" value=1>
                 </div>
+                <div>
+                    <h3>CycloGraph Mode</h3>
+                    <input type="checkbox" id="CGMode" value=1>
+                    <div class="input-group1">
+                        <span class="input-group-addon">sides</span>
+                        <input type="number" id="CGSide" class="form-control" placeholder="36" value="36" class="size">
+                        <span>Cordinate for Cyclograph center :</span>
+                        <br/>
+                        <span class="input-group-addon">X</span>
+                        <input type="number" id="Xcord"  placeholder="0" value="0" class="size">
+                    
+                        <span class="input-group-addon">Y</span>
+                        <input type="number" id="Ycord"  placeholder="0" value="0" class="size">
+                    </div>
+                </div>
+
                 <div class="colorButtons">
                     <h3>FillColor</h3>
                     <input type="color" id="fillcolorpicker" value="#17c70e" class="colorpicker">
@@ -38,9 +54,7 @@
                     <h3>Tools</h3>
                     <button id="eraser" onclick="handleEraser()">eraser</button>
                     <button id="clear" onclick="handleClear">clear</button>
-                </div>
-
-                
+                </div>            
 
                 <div class="buttonSize">
                     <h3>Size (<span id="showSize">5</span>)</h3>
@@ -65,9 +79,12 @@
                         <input type="number" id="polygonSide" class="form-control" placeholder="6" value="6" class="size">
                     </div>
                 </a>
+                
             </div><br>
-                <canvas id="my-canvas" width="1000" height="500" class="canvas"></canvas>
             
+            <canvas id="my-canvas" width="1000" height="500" class="canvas"></canvas>
+            
+            <h4 id="position">0,0</h4>    
  
         </div>
         
