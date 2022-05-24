@@ -7,10 +7,8 @@
         <link rel="stylesheet" type="text/css" href="style.css">
         <style>
             body{
-                background-color: rgb(200, 199, 225);
-                
-            }
-           
+                background-color: rgb(200, 199, 225);               
+            }          
         </style>
     </head>
     <body>
@@ -33,15 +31,15 @@
                     <h3>CycloGraph Mode</h3>
                     <input type="checkbox" id="CGMode" value=1>
                     <div class="input-group1">
-                        <span class="input-group-addon">sides</span>
+                        <span class="input-group-addon">SIDES</span>
                         <input type="number" id="CGSide" class="form-control" placeholder="36" value="36" class="size">
-                        <span>Cordinate for Cyclograph center :</span>
+                        <span>CENTER</span>
                         <br/>
                         <span class="input-group-addon">X</span>
-                        <input type="number" id="Xcord"  placeholder="0" value="0" class="size">
+                        <input type="number" id="Xcord"  placeholder="0" value="500" class="size">
                     
                         <span class="input-group-addon">Y</span>
-                        <input type="number" id="Ycord"  placeholder="0" value="0" class="size">
+                        <input type="number" id="Ycord"  placeholder="0" value="200" class="size">
                     </div>
                 </div>
 
@@ -62,8 +60,7 @@
                 </div>
                 <div id="img-data-div">
                     <a href="#" id="img-file" download="image.png">download image</a>
-                </div>
-                
+                </div>               
         </div>        
         <div class="wrapper">
             <div class="toolbar">
@@ -74,10 +71,10 @@
                 <a href="#" id="ellipse" onclick="ChangeTool('ellipse')"><img src="icons/ellipse-icon.png"></a>
                 <a href="#" id="polygon" onclick="ChangeTool('polygon')">
                     <img src="icons/polygon-icon.png">
-                    <div class="input-group">
-                        <span class="input-group-addon">Number of sides</span>
-                        <input type="number" id="polygonSide" class="form-control" placeholder="6" value="6" class="size">
-                    </div>
+                </a>
+                <a class="input-group" >
+                    <span class="input-group-addon">Number of Polygon sides</span>
+                    <input type="number" id="polygonSide" class="form-control" placeholder="6" value="6" class="size">
                 </a>
                 
             </div><br>

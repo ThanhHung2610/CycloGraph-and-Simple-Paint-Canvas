@@ -28,7 +28,7 @@ let done = true;
 let SList=new Array();
 
 //Center for CycloGraph
-let CGcenter=new Point(0,0);
+let CGcenter=new Point(500,200);
 
 // Save position of mouse event
 let mouseDownPos;
@@ -39,9 +39,6 @@ let brushPoints = new Array(Point);
 let rotatedAngle = null;
 // Number of Sides of the polygon
 let polygonSides = 6;
-
-
-
 
 let canvas;
 let ctx;
@@ -163,17 +160,15 @@ document.getElementById("CGMode").addEventListener('click',function(){
 
 document.getElementById('Xcord').addEventListener('change',function(){
     if(this.value<0 || this.value>canvasWidth){
-        alert("Out of canvas space")
+        alert("X value out of canvas space")
     }else{
         CGcenter.x=this.value;
     }
 })
 
-
-
 document.getElementById('Ycord').addEventListener('change',function(){
     if(this.value<0 || this.value>canvasHeight){
-        alert("Out of canvas space")
+        alert("Y value out of canvas space")
     }else{
         CGcenter.y=this.value;
     }
@@ -229,6 +224,8 @@ function setupCanvas(){
     canvas.addEventListener("mouseup",  ReactToMouseUp);
 }
 
+
+
 let shapeDraw;
 function drawCanvas(){
     // Draw background
@@ -237,26 +234,6 @@ function drawCanvas(){
     ctx.lineWidth =  line_Width;
     ctx.fillStyle =  currentBg;
     ctx.fillRect(0, 0,  canvas.width,  canvas.height);
-
-
-
-    let center = new Point(200,200)
-    ctx.translate(center.x,center.y);
-    let sides = 40;
-    let angle = 360/sides;
-   
-
-    for(let i = 0;i<sides;i++){
-    ctx.rotate(angle * Math.PI / 180);
-    ctx.strokeRect(50-center.x, 20-center.y, 100, 50);
-    //ctx.rotate(-90 * Math.PI / 180);
-    }
-
-    ctx.translate(-center.x,-center.y);
-        // 2 * PI equals 360 degrees
-        // Divide 360 into parts based on how many polygon 
-        // sides you want 
-        //angle += 2 * Math.PI / 3;
 }
 
 function drawCurrentShape(){
@@ -297,7 +274,48 @@ function drawCurrentShape(){
 }
 
 
-    
+function drawCycloGraph(){
+    canvas.strokeStyle=currentColor;
+    canvas.strokeColor=currentColor;    
+    ctx.fillStyle = currentBg;
+    ctx.lineWidth =  line_Width;
+
+    ctx.translate(CGcenter.x,CGcenter.y);
+    let angle = 360/CGSides;
+   
+    let mousedownTrSlate=new Point(mouseDownPos.x-CGcenter.x,mouseDownPos.y-CGcenter.y);
+    let mousemoveTrSlate=new Point(mouseMovePos.x-CGcenter.x,mouseMovePos.y-CGcenter.y);
+
+    for(let i = 0;i<CGSides;i++){
+
+        ctx.rotate(angle * Math.PI / 180);    
+        if( currentTool === "brush"){
+            // Create paint brush
+            shapeCur = new brush(line_Width,currentColor,brushPoints);
+            shapeCur.draw(ctx);
+        }else if( currentTool === "line"){
+            // Creates line
+            shapeCur = new line(mousedownTrSlate,mousemoveTrSlate,line_Width,currentColor,currentFillColor,isFill);
+            shapeCur.draw(ctx);
+        } else if(currentTool === "rectangle"){
+            // Creates rectangles
+            shapeCur = new rectangle(mousedownTrSlate,mousemoveTrSlate,line_Width,currentColor,currentFillColor,isFill);
+            shapeCur.draw(ctx);
+        } else if(currentTool === "circle"){
+        // Creates circle
+        shapeCur = new circle(mousedownTrSlate,mousemoveTrSlate,line_Width,currentColor,currentFillColor,isFill);
+        shapeCur.draw(ctx);
+        } else if(currentTool === "ellipse"){
+            // Create ellipses
+            shapeCur = new ellipse(mousedownTrSlate,mousemoveTrSlate,line_Width,currentColor,currentFillColor,isFill,0);
+            shapeCur.draw(ctx);
+        } else if(currentTool === "polygon"){
+            shapeCur = new polygon(mousedownTrSlate,mousemoveTrSlate,line_Width,currentColor,currentFillColor,isFill,polygonSides);
+            shapeCur.draw(ctx);
+        }  
+    }
+    ctx.translate(-CGcenter.x,-CGcenter.y);    
+}
 
     function SaveCanvasImage(){
         // Save image
@@ -326,7 +344,6 @@ function drawCurrentShape(){
     // }
 
 
-
     function ReactToMouseDown(e){
         // Change the mouse pointer to a crosshair
         canvas.style.cursor = "crosshair";
@@ -345,13 +362,16 @@ function drawCurrentShape(){
         if( currentTool === 'brush'){
                 brushPoints.push(mouseDownPos);
         }
+        if(CGMode){
+            drawCycloGraph();
+        }
     };
 
 function ReactToMouseMove(e){
     console.log(CGcenter);
     canvas.style.cursor = "crosshair";
     mouseMovePos = GetMousePosition(e.clientX, e.clientY);
-    showMp.innerHTML = 'X = '+ parseInt(mouseMovePos.x)+', Y = '+parseInt(mouseMovePos.y)+'X = '+ parseInt(e.clientY)+', Y = '+parseInt(e.clientX);
+    showMp.innerHTML = 'X = '+ parseInt(mouseMovePos.x)+', Y = '+parseInt(mouseMovePos.y);
     
     if (drawing){
         // If using brush tool and dragging store each point
@@ -363,6 +383,9 @@ function ReactToMouseMove(e){
         }
         RedrawCanvasImage();
         drawCurrentShape();
+        if(CGMode){
+            drawCycloGraph();
+        }
     }
 };
 
