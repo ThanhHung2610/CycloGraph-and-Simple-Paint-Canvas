@@ -7,14 +7,14 @@ class brush{
         this.listBrushPoints = listBrushPoints;
     }
     draw(CanvasContext){
+        CanvasContext.lineCap = "round";
         CanvasContext.strokeStyle = this.color;
         let nPoints = this.listBrushPoints.length;
         for(let i = 1; i < nPoints; i++){
             // draw points in list
             CanvasContext.beginPath();
-            CanvasContext.moveTo(this.listBrushPoints[i-1].x,this.listBrushPoints[i-1].y);
+            CanvasContext.moveTo(this.listBrushPoints[i-1].x,this.listBrushPoints[i-1].y);  
             CanvasContext.lineTo(this.listBrushPoints[i].x, this.listBrushPoints[i].y);
-            CanvasContext.closePath();
             CanvasContext.stroke();
         }
     }
