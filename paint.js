@@ -327,6 +327,16 @@ function RedrawCanvasImage(){
     canvas.strokeStyle=currentColor;
 }
 
+// Saves the image in default download directory
+document.downloadImage = function downloadImage(){
+    // Get a reference to the link element 
+    var imageFile = document.getElementById("img-file");
+    // Set that you want to download the image when link is clicked
+    imageFile.setAttribute('download', 'image.png');
+    // Reference the image in canvas for download
+    imageFile.setAttribute('href', canvas.toDataURL());
+}
+
 function ReactToMouseDown(e){
     // Change the mouse pointer to a crosshair
     canvas.style.cursor = "crosshair";
