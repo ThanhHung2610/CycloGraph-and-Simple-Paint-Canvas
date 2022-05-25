@@ -110,6 +110,7 @@ document.getElementById('eraser').addEventListener('click',function(){
 
 document.getElementById('clear').addEventListener('click',function(){
     drawCanvas();
+    SaveCanvasImage();
 })
 
 
