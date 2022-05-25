@@ -178,10 +178,9 @@ document.getElementById('Ycord').addEventListener('change',function(){
 
 document.ChangeTool = function ChangeTool(toolClicked){
     if (flagEraser){
-        currentColor=ColBackUp;
+        currentColor = ColBackUp;
         flagEraser = false;
     }
-
     document.getElementById("brush").className = "";
     document.getElementById("line").className = "";
     document.getElementById("rectangle").className = "";
